@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:quizzler/quizz_brain.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+
+QuizBrain quizBrain = QuizBrain();
 
 void main() => runApp(Quizzler());
 
@@ -22,6 +26,75 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+  List<Icon> scoreKeeper = [];
+
+  void correct() {
+    scoreKeeper.add(Icon(
+      Icons.check,
+      color: Colors.green,
+    ));
+    quizBrain.increaseScore();
+    quizBrain.nextQuestion();
+  }
+
+  void incorrect() {
+    scoreKeeper.add(Icon(
+      Icons.close,
+      color: Colors.red,
+    ));
+    quizBrain.nextQuestion();
+  }
+
+  void reset() {
+    setState(() {
+      scoreKeeper.clear();
+      quizBrain.reset();
+    });
+  }
+
+  void isFinishedAlert() {
+    int score = quizBrain.getScore();
+    int totalQuestions = quizBrain.getQuestionsSize();
+    Alert(
+      context: context,
+      type: AlertType.none,
+      title: "Finished!",
+      desc: "Score: $score/$totalQuestions",
+      buttons: [
+        DialogButton(
+          child: Text(
+            "Restart",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () {
+            reset();
+            return Navigator.pop(context);
+          },
+          width: 120,
+        )
+      ],
+    ).show();
+  }
+
+  void checkAnswer(bool userPickedAnswer) {
+    bool correctAnswer = quizBrain.getAnswer();
+
+    if (quizBrain.isFinished()) {
+      isFinishedAlert();
+    } else {
+      setState(() {
+        if (userPickedAnswer == correctAnswer) {
+          correct();
+        } else {
+          incorrect();
+        }
+      });
+      if (quizBrain.isFinished()) {
+        isFinishedAlert();
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -33,7 +106,7 @@ class _QuizPageState extends State<QuizPage> {
           child: Center(
             child: Container(
               child: Text(
-                'Is this a question?',
+                quizBrain.getQuestion(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
@@ -48,7 +121,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: const EdgeInsets.all(15.0),
             child: FlatButton(
               onPressed: () {
-                // Here we do something when true.
+                checkAnswer(true);
               },
               child: Text(
                 'True',
@@ -66,7 +139,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: const EdgeInsets.all(15.0),
             child: FlatButton(
               onPressed: () {
-                // Here we do something when false.
+                checkAnswer(false);
               },
               child: Text(
                 'False',
@@ -79,7 +152,9 @@ class _QuizPageState extends State<QuizPage> {
             ),
           ),
         ),
-        //TODO: Add a Row here as your score keeper
+        Row(
+          children: scoreKeeper,
+        )
       ],
     );
   }
