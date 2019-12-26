@@ -1,10 +1,6 @@
-//TODO: Step 6 - import the story.dart file into this file.
 import 'package:destini_challenge_starting/story.dart';
 
-//TODO: Step 5 - Create a new class called StoryBrain.
 class StoryBrain {
-//TODO: Step 7 - Uncomment the lines below to include storyData as a private property in StoryBrain. Hint: You might need to change something in story.dart to make this work.
-
   int _storyNumber = 0;
 
   List<Story> _storyData = [
@@ -39,19 +35,14 @@ class StoryBrain {
         choice2: '')
   ];
 
-//TODO: Step 23 - Use the storyNumber property inside getStory(), getChoice1() and getChoice2() so that it gets the updated story and choices rather than always just the first (0th) one.
-
-//TODO: Step 8 - Create a method called getStory() that returns the first storyTitle from _storyData.
   String getStory() {
     return _storyData[_storyNumber].storyTitle;
   }
 
-//TODO: Step 11 - Create a method called getChoice1() that returns the text for the first choice1 from _storyData.
   String getChoice1() {
     return _storyData[_storyNumber].choice1;
   }
 
-//TODO: Step 12 - Create a method called getChoice2() that returns the text for the first choice2 from _storyData.
   String getChoice2() {
     return _storyData[_storyNumber].choice2;
   }
@@ -78,7 +69,6 @@ class StoryBrain {
     }
   }
 
-//TODO: Step 27 - Create a method called buttonShouldBeVisible() which checks to see if storyNumber is 0 or 1 or 2 (when both buttons should show choices) and return true if that is the case, else it should return false.
   bool buttonShouldBeVisible() {
     return _storyNumber < 3;
   }
