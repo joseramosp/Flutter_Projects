@@ -19,7 +19,8 @@ const List<String> currenciesList = [
   'SEK',
   'SGD',
   'USD',
-  'ZAR'
+  'ZAR',
+  'DOP'
 ];
 
 const List<String> cryptoList = [
