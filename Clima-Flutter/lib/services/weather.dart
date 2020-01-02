@@ -1,4 +1,33 @@
+import 'package:clima/services/location.dart';
+import 'package:clima/services/networking.dart';
+
+const String apiKey = '5f6fdb5e8f38a448ffb943391bc55ebb';
+const String openWeatherMapURL =
+    'https://api.openweathermap.org/data/2.5/weather';
+const String openWeatherMapURLForCity =
+    'api.openweathermap.org/data/2.5/weather?q=';
+
 class WeatherModel {
+  Future<dynamic> getLocationWeather() async {
+    Location location = Location();
+    await location
+        .getCurrentLocation(); // Here I am using await to wait until it ends.
+    NetworkHelper networkHelper = NetworkHelper(
+        '$openWeatherMapURL?lat=${location.latitude}&lon=${location.longitude}&appid=$apiKey&units=metric');
+
+    var weatherData = await networkHelper.getData();
+    return weatherData;
+  }
+
+  Future<dynamic> getCityWeather(dynamic cityName) async {
+    var url = '$openWeatherMapURL?q=$cityName&appid=$apiKey&units=metric';
+
+    NetworkHelper networkHelper = NetworkHelper(url);
+
+    var weatherData = await networkHelper.getData();
+    return weatherData;
+  }
+
   String getWeatherIcon(int condition) {
     if (condition < 300) {
       return '🌩';
