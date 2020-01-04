@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:bitcoin_ticker/constants.dart';
 import 'package:bitcoin_ticker/coin_data.dart';
 
 class NetworkHelper {

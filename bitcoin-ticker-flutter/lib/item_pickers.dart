@@ -2,6 +2,7 @@
 //
 //import 'coin_data.dart';
 //
+//Todo: Refactor all of this to clean my code
 //class ItemPicker {
 //  DropdownButton androidDropdownButton() {
 //    List<DropdownMenuItem<String>> dropdownItems = [];

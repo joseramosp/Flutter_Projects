@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'services/bitcoin_data.dart';
 import 'package:flutter/cupertino.dart';
-import 'services/networking.dart';
-import 'constants.dart';
 import 'dart:io' show Platform;
 import 'package:bitcoin_ticker/coin_data.dart';
 import 'crypto_info_card.dart';
@@ -64,13 +62,13 @@ class _PriceScreenState extends State<PriceScreen> {
   void iOSUpdateUI(int selectedIndex) async {
     String newCurrencyValue = currenciesList[selectedIndex];
     var btcCurrencyData =
-        await coinData.getBitCoinPrice('BTC', newCurrencyValue);
+        await coinData.getCryptoCurrencyPrice('BTC', newCurrencyValue);
     double btcValue = btcCurrencyData['last'];
     var ethCurrencyData =
-        await coinData.getBitCoinPrice('ETH', newCurrencyValue);
+        await coinData.getCryptoCurrencyPrice('ETH', newCurrencyValue);
     double ethValue = ethCurrencyData['last'];
     var ltcCurrencyData =
-        await coinData.getBitCoinPrice('LTC', newCurrencyValue);
+        await coinData.getCryptoCurrencyPrice('LTC', newCurrencyValue);
     double ltcValue = ltcCurrencyData['last'];
     setState(() {
       selectedCurrency = newCurrencyValue;
@@ -80,8 +78,10 @@ class _PriceScreenState extends State<PriceScreen> {
     });
   }
 
+  //TODO: Needs to be optimized to show all the crypto
   void androidUpdateUI(String selectedCurrency) async {
-    var currencyData = await coinData.getBitCoinPrice('BTC', selectedCurrency);
+    var currencyData =
+        await coinData.getCryptoCurrencyPrice('BTC', selectedCurrency);
     double value = currencyData['last'];
     setState(() {
       this.selectedCurrency = selectedCurrency;
@@ -109,10 +109,20 @@ class _PriceScreenState extends State<PriceScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              CryptoInfoCard('BTC', this.btcPrice, this.selectedCurrency),
-              CryptoInfoCard('ETH', this.ethPrice, this.selectedCurrency),
-              CryptoInfoCard('LTC', this.ltcPrice, this.selectedCurrency),
+              CryptoInfoCard(
+                  cryptoList[0], this.btcPrice, this.selectedCurrency),
+              CryptoInfoCard(
+                  cryptoList[1], this.ethPrice, this.selectedCurrency),
+              CryptoInfoCard(
+                  cryptoList[2], this.ltcPrice, this.selectedCurrency),
             ],
+          ),
+          Expanded(
+            child: Image(
+              image: NetworkImage(
+                'https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Coat_of_arms_of_the_Dominican_Republic.svg/250px-Coat_of_arms_of_the_Dominican_Republic.svg.png',
+              ),
+            ),
           ),
           Container(
             height: 150.0,
