@@ -9,11 +9,9 @@ class TasksList extends StatelessWidget {
       children: <Widget>[
         TaskTile(
           taskName: 'Go to sleep',
-          isDone: true,
         ),
         TaskTile(
           taskName: 'Study Flutter',
-          isDone: true,
         ),
       ],
     );
