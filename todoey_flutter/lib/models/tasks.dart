@@ -1,30 +1,43 @@
 import 'package:flutter/material.dart';
 import 'task.dart';
+import 'package:todoey_flutter/database/tasks_database.dart';
+import 'dart:async';
 
 class Tasks with ChangeNotifier {
-  List<Task> tasks = [
-    Task(name: 'Do a commit'),
-    Task(name: 'Make mi first million dollars'),
-    Task(name: 'Study Flutter'),
-    Task(name: 'Test'),
-  ];
+  final TaskDatabase tasksDatabase = TaskDatabase();
 
-  void addTask(String taskName) {
-    tasks.add(Task(name: taskName));
+  List<Task> tasks;
+
+  Tasks() {
+    tasks = [];
+    getTasksFromDatabase();
+  }
+
+  void addTask(String taskName) async {
+    Task newTask = Task(name: taskName);
+    tasks.add(newTask);
+    await tasksDatabase.insertTask(newTask);
     notifyListeners();
   }
 
   void changeTaskStatus(index) {
     tasks[index].toggleDone();
+    tasksDatabase.updateTask(tasks[index]);
     notifyListeners();
   }
 
   void deleteTask(index) {
+    tasksDatabase.deleteTask(tasks[index]);
     tasks.removeAt(index);
     notifyListeners();
   }
 
   int get taskCount {
-    return tasks.length;
+    return tasks.length ?? 0;
+  }
+
+  void getTasksFromDatabase() async {
+    tasks = await tasksDatabase.tasksList();
+    notifyListeners();
   }
 }

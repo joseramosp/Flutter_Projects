@@ -25,7 +25,9 @@ class _TasksScreenState extends State<TasksScreen> {
               showModalBottomSheet(
                 context: context,
                 builder: (context) => AddTaskScreen((newTaskName) {
-                  taskData.addTask(newTaskName);
+                  if (newTaskName != null) {
+                    taskData.addTask(newTaskName);
+                  }
                   Navigator.pop(context);
                 }),
               );
@@ -65,7 +67,7 @@ class _TasksScreenState extends State<TasksScreen> {
                       height: 10,
                     ),
                     Text(
-                      '${taskData.taskCount} Tasks',
+                      '${taskData.taskCount ?? 0} Tasks',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
