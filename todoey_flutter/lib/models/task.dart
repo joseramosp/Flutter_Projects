@@ -1,8 +1,5 @@
 import 'dart:math';
-
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
-import 'dart:math';
 
 class Task with ChangeNotifier {
   Task({this.id, this.timestamp, this.isDone = false, this.name});

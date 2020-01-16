@@ -77,7 +77,7 @@ class TaskDatabase {
     // Get a reference to the database.
     final Database db = await database;
 
-    // Query the table for all The Dogs.
+    // Query the table for all The Task.
     final List<Map<String, dynamic>> maps = await db.query('tasks');
 
     // Convert the List<Map<String, dynamic> into a List<Task>.
