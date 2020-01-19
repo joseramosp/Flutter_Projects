@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
 
-class FirstScreen extends StatelessWidget {
+class FirstScreen extends StatefulWidget {
   static String id = 'calculation_screen';
 
-  double calculateNetPay(double hours, int rate) {
+  @override
+  _FirstScreenState createState() => _FirstScreenState();
+}
+
+class _FirstScreenState extends State<FirstScreen> {
+  double hoursWorked = 0;
+  double rate = 0;
+
+  double calculateNetPay(double hours, double rate) {
+    print(rate);
+    print(hoursWorked);
     return rate * hours;
   }
 
@@ -22,11 +32,33 @@ class FirstScreen extends StatelessWidget {
           DataInputTextField(
             text: 'Rate',
             exampleOfInput: '\$24.50',
+            onChanged: (String newValue) {
+              this.rate = double.parse(newValue);
+              print(newValue);
+              print(rate);
+            },
           ),
           DataInputTextField(
             text: 'Hours',
             exampleOfInput: '35.25',
-          )
+            onChanged: (String newValue) {
+              setState(() {
+                this.hoursWorked = double.parse(newValue);
+              });
+            },
+          ),
+          FlatButton(
+            color: Colors.red,
+            child: Text(
+              'Calculate',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            onPressed: () {
+              print(calculateNetPay(hoursWorked, rate));
+            },
+          ),
         ],
       ),
     );
@@ -36,8 +68,9 @@ class FirstScreen extends StatelessWidget {
 class DataInputTextField extends StatelessWidget {
   final String text;
   final String exampleOfInput;
+  final Function onChanged;
 
-  DataInputTextField({this.text, this.exampleOfInput});
+  DataInputTextField({this.text, this.exampleOfInput, this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +104,7 @@ class DataInputTextField extends StatelessWidget {
                 borderSide: BorderSide.none,
               ),
             ),
+            onChanged: onChanged,
           ),
         ),
       ],
