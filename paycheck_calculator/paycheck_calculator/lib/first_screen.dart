@@ -10,6 +10,7 @@ class FirstScreen extends StatefulWidget {
 class _FirstScreenState extends State<FirstScreen> {
   double hoursWorked = 0;
   double rate = 0;
+  int taxPercentageDeducted = 15;
 
   double calculateNetPay(double hours, double rate) {
     print(rate);
@@ -22,15 +23,27 @@ class _FirstScreenState extends State<FirstScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Calculator',
+          'Paycheck Calculator',
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.save_alt),
+            title: Text('Saved'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.watch_later),
+            title: Text('GUYG'),
+          ),
+        ],
       ),
       body: Column(
 //        crossAxisAlignment: CrossAxisAlignment.stretch,
-//        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           DataInputTextField(
-            text: 'Rate',
+            text: 'Rate:',
             exampleOfInput: '\$24.50',
             onChanged: (String newValue) {
               this.rate = double.parse(newValue);
@@ -39,7 +52,7 @@ class _FirstScreenState extends State<FirstScreen> {
             },
           ),
           DataInputTextField(
-            text: 'Hours',
+            text: 'Hours:',
             exampleOfInput: '35.25',
             onChanged: (String newValue) {
               setState(() {
@@ -47,17 +60,29 @@ class _FirstScreenState extends State<FirstScreen> {
               });
             },
           ),
-          FlatButton(
-            color: Colors.red,
-            child: Text(
-              'Calculate',
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-            onPressed: () {
-              print(calculateNetPay(hoursWorked, rate));
+          TaxSlider(
+            taxAmount: taxPercentageDeducted,
+            onChanged: (newValue) {
+              setState(() {
+                taxPercentageDeducted = newValue.round();
+              });
             },
+          ),
+          Container(
+            width: double.infinity,
+            height: 60,
+            child: FlatButton(
+              color: Colors.red,
+              child: Text(
+                'Calculate',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              onPressed: () {
+                print(calculateNetPay(hoursWorked, rate));
+              },
+            ),
           ),
         ],
       ),
@@ -105,6 +130,31 @@ class DataInputTextField extends StatelessWidget {
               ),
             ),
             onChanged: onChanged,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class TaxSlider extends StatelessWidget {
+  final int taxAmount;
+  final Function onChanged;
+
+  TaxSlider({this.taxAmount, this.onChanged});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Text('Estimated tax deduction: $taxAmount%'),
+        Container(
+          width: 250,
+          child: Slider(
+            value: taxAmount.toDouble(),
+            onChanged: onChanged,
+            min: 0,
+            max: 100,
           ),
         ),
       ],
